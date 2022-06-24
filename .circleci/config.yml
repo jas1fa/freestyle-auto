@@ -78,7 +78,9 @@ jobs:
       - restore_cache:
           keys: [frontend-build]
       # Your job code here
-      - command: |
+      - run:
+        name: "test frontend"
+        command: |
           cd frontend
           npm install
           npm run test
@@ -94,10 +96,12 @@ jobs:
       - restore_cache:
           keys: [backend-build]
       # Your job code here
-      - command: |
-          cd backend
-          npm install
-          npm run test
+      - run:
+          name: "test frontend"
+          command: |
+            cd backend
+            npm install
+            npm run test
 
 #   scan-frontend:
 #     docker:
