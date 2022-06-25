@@ -1,7 +1,7 @@
 ---
 - name: set up environments variables
   shell: |
-    sudo cat secrets.txt >> ~/.bashrc
+    cat files/secrets.txt >> ~/.bashrc
     source ~/.bashrc
 
 - name: "install nodejs"
