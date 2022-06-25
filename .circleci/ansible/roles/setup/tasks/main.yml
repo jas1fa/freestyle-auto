@@ -1,8 +1,9 @@
 ---
 - name: set up environments variables
-  shell: |
-    cat files/secrets.txt >> ~/.bashrc
-    source ~/.bashrc
+  script: files/secrets.sh
+  # shell: |
+  #   cat files/secrets.txt >> ~/.bashrc
+  #   source ~/.bashrc
 
 - name: "install nodejs"
   apt:
