@@ -1,0 +1,10 @@
+---
+- name: "install nodejs"
+  apt:
+    name: "nodejs"
+    state: latest
+
+- name: "install pm2"
+  apt:
+    name: "pm2"
+    state: latest
