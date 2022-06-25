@@ -2,11 +2,11 @@
 - name: unarchive artifact
   unarchive:
     src: files/artifact.tar.gz
-    dest: ~/backend
+    dest: ~/
 
 - name: start app
   shell: |
-    cd ~/backend
+    cd ~/artifact
     npm install
     pm2 stop default
     pm2 start npm -- start
