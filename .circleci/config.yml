@@ -35,14 +35,11 @@ commands:
           when: on_fail
           command: |
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS = find -type f --name migrations_dump.txt
-            if [$SUCCESS]
-            then
-             cd ~/project/backend
-             npm install
-             # Add revert code here. You can find this in the Getting Started section.
-             npm run migrations:revert
-            fi
+            cd ~/project/backend
+            npm install
+            npm run build
+            # Add revert code here. You can find this in the Getting Started section.
+            npm run migrations:revert
 
 jobs:
   build-frontend:
@@ -209,10 +206,8 @@ jobs:
       - add_ssh_keys:
           fingerprint: ["02:2b:53:b7:a0:8f:13:a5:4c:0d:a0:ed:90:5d:e1:f9"]
       # attach workspace
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - project/backend
+       - attach_workspace:
+          at: ~/
       - run:
           name: Install dependencies
           command: |
@@ -222,6 +217,10 @@ jobs:
           command: |
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-server.yml
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project/backend
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
