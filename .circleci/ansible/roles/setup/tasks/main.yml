@@ -1,7 +1,9 @@
 ---
 - name: "install nodejs"
   apt:
-    name: nodejs
+    name: 
+      - nodejs
+      - npm
 
 - name: install pm2
   shell: npm install pm2 -g
