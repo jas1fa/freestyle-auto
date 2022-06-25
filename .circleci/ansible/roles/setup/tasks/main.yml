@@ -9,4 +9,6 @@
       - npm
 
 - name: install pm2
-  shell: npm install pm2 -g
+  shell: |
+    npm install pm2 -g
+    echo $TYPEORM_ENTITIES
