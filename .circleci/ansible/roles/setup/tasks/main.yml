@@ -1,10 +1,12 @@
 ---
 - name: set up environments variables
-  script: files/secrets.sh
+  script:
+    cmd: files/secrets.sh
+    executable: source
 
 - name: "install nodejs"
   apt:
-    name: 
+    name:
       - nodejs
       - npm
 
