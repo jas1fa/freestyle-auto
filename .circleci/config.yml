@@ -314,7 +314,7 @@ jobs:
           name: Install dependencies
           command: |
             # your code here
-            apk add --update --no-cache tar gzip ansible aws-cli openssh nodejs npm
+            apk add --update --no-cache tar gzip ansible aws-cli openssh nodejs npm curl
       - run:
           name: Deploy backend
           command: |
