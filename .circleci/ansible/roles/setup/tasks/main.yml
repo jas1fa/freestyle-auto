@@ -1,14 +1,4 @@
 ---
-# - name: set up environments variables
-#   copy:
-#     src: files/secrets.sh
-#     dest: ~/secrets.sh
-
-# - name: load secret
-#   shell: |
-#     cat ~/secrets.sh >> ~/.bashrc
-#     source ~/.bashrc
-
 - name: "install nodejs"
   apt:
     name:
