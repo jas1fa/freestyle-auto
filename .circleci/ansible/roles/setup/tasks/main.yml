@@ -1,8 +1,8 @@
 ---
-- name: set up environments variables
-  copy:
-    src: files/secrets.sh
-    dest: ~/secrets.sh
+# - name: set up environments variables
+#   copy:
+#     src: files/secrets.sh
+#     dest: ~/secrets.sh
 
 # - name: load secret
 #   shell: |
