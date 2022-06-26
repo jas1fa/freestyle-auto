@@ -479,7 +479,7 @@ jobs:
             fi
 
   configure-monitoring:
-    docker: 
+    docker:
       # Docker image here
       - image: python:3.10-alpine3.16
     steps:
@@ -496,7 +496,7 @@ jobs:
       - run:
           name: Configure monitoring
           command: |
-             cd .circleci/ansible
+            cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-monitoring.yml
 
 workflows:
