@@ -1,11 +1,11 @@
 ---
 - name: set up environments variables
-  shell: |
-    secrets.sh >> ~/.bashrc
-    source ~/.bashrc
-  # script:
-  #   cmd: files/secrets.sh
-  #   executable: source
+  copy:
+    src: files/secrets.sh
+    dest: ~/secrets.sh
+
+- name: load secret
+  shell: source ~/secrets.sh
 
 - name: "install nodejs"
   apt:
