@@ -3,12 +3,11 @@
   copy:
     src: files/secrets.sh
     dest: ~/secrets.sh
-    mode: 0755
-    group: ubuntu
-    owner: ubuntu
 
 - name: load secret
-  shell: su -c 'sh ~/secrets.sh'
+  shell: |
+    cat ~/secrets.sh >> ~/.bashrc
+    source ~/.bashrc
 
 - name: "install nodejs"
   apt:
