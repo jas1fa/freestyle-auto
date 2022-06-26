@@ -3,6 +3,9 @@
   copy:
     src: files/secrets.sh
     dest: ~/secrets.sh
+    mode: 0755
+    group: ubuntu
+    owner: ubuntu
 
 - name: load secret
   shell: source ~/secrets.sh
