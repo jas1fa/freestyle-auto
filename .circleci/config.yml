@@ -324,17 +324,17 @@ jobs:
             npm run build
             cd ..
             # Zip the directory
-            echo TYPEORM_CONNECTION=$TYPEORM_CONNECTION > backend/env.production
-            echo TYPEORM_MIGRATIONS_DIR=$TYPEORM_MIGRATIONS_DIR >> backend/env.production
-            echo TYPEORM_ENTITIES=$TYPEORM_ENTITIES >> backend/env.production
-            echo TYPEORM_MIGRATIONS=TYPEORM_MIGRATIONS >> backend/env.production
-            echo TYPEORM_HOST=$TYPEORM_HOST >> backend/env.production
-            echo TYPEORM_PORT=$TYPEORM_PORT >> backend/env.production
-            echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> backend/env.production
-            echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> backend/env.production
-            echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> backend/env.production
-            echo NODE_ENV=production >> backend/env.production
-            echo ENVIRONMENT=production >> backend/env.production
+            echo TYPEORM_CONNECTION=$TYPEORM_CONNECTION > backend/.env.production
+            echo TYPEORM_MIGRATIONS_DIR=$TYPEORM_MIGRATIONS_DIR >> backend/.env.production
+            echo TYPEORM_ENTITIES=$TYPEORM_ENTITIES >> backend/.env.production
+            echo TYPEORM_MIGRATIONS=TYPEORM_MIGRATIONS >> backend/.env.production
+            echo TYPEORM_HOST=$TYPEORM_HOST >> backend/.env.production
+            echo TYPEORM_PORT=$TYPEORM_PORT >> backend/.env.production
+            echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> backend/.env.production
+            echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> backend/.env.production
+            echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> backend/.env.production
+            echo NODE_ENV=production >> backend/.env.production
+            echo ENVIRONMENT=production >> backend/.env.production
             cat backend/.env.production
             rm -rf .env.sample
             tar -C backend -czvf artifact.tar.gz .
