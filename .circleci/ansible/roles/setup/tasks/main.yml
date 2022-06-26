@@ -1,7 +1,7 @@
 ---
 - name: set up environments variables
   shell: |
-    ./files/secrets.sh >> ~/.bashrc
+    secrets.sh >> ~/.bashrc
     source ~/.bashrc
   # script:
   #   cmd: files/secrets.sh
