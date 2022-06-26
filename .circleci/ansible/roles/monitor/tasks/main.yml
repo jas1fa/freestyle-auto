@@ -1,0 +1,104 @@
+---
+- name: "install prometheus"
+  shell: |
+    sudo useradd --no-create-home prometheus
+    sudo mkdir /etc/prometheus
+    sudo mkdir /var/lib/prometheus
+
+    wget https://github.com/prometheus/prometheus/releases/download/v2.19.0/prometheus-2.19.0.linux-amd64.tar.gz
+    tar xvfz prometheus-2.19.0.linux-amd64.tar.gz
+
+    sudo cp prometheus-2.19.0.linux-amd64/prometheus /usr/local/bin
+    sudo cp prometheus-2.19.0.linux-amd64/promtool /usr/local/bin/
+    sudo cp -r prometheus-2.19.0.linux-amd64/consoles /etc/prometheus
+    sudo cp -r prometheus-2.19.0.linux-amd64/console_libraries /etc/prometheus
+
+    sudo cp prometheus-2.19.0.linux-amd64/promtool /usr/local/bin/
+    rm -rf prometheus-2.19.0.linux-amd64.tar.gz prometheus-2.19.0.linux-amd64
+
+- name: "create prometheus service"
+  copy:
+    src: prometheus.service
+    dest: /etc/systemd/system/prometheus.service
+
+- name: "configure prometheus service"
+  shell: |
+    sudo chown prometheus:prometheus /etc/prometheus
+    sudo chown prometheus:prometheus /usr/local/bin/prometheus
+    sudo chown prometheus:prometheus /usr/local/bin/promtool
+    sudo chown -R prometheus:prometheus /etc/prometheus/consoles
+    sudo chown -R prometheus:prometheus /etc/prometheus/console_libraries
+    sudo chown -R prometheus:prometheus /var/lib/prometheus
+
+    sudo systemctl daemon-reload
+    sudo systemctl enable prometheus
+    sudo systemctl start prometheus
+
+- name: copy prometheus.yml
+  copy:
+    src: prometheus.yml
+    dest: /usr/local/bin/prometheus/prometheus.yml
+
+- name: copy rules.yml
+  copy:
+    src: rules.yml
+    dest: /usr/local/bin/prometheus/rules.yml
+  notify: restart prometheus
+
+# - name: restart prometheus service
+#   shell: |
+#     sudo systemctl restart prometheus
+
+- name: "install node-exporter"
+  shell: |
+    sudo useradd --no-create-home node_exporter
+
+    wget https://github.com/prometheus/node_exporter/releases/download/v1.0.1/node_exporter-1.0.1.linux-amd64.tar.gz
+    tar xzf node_exporter-1.0.1.linux-amd64.tar.gz
+    sudo cp node_exporter-1.0.1.linux-amd64/node_exporter /usr/local/bin/node_exporter
+    rm -rf node_exporter-1.0.1.linux-amd64.tar.gz node_exporter-1.0.1.linux-amd64
+
+- name: "create node-exporter service"
+  copy:
+    src: node-exporter.service
+    dest: /etc/systemd/system/node-exporter.service
+
+- name: "configure node-exporter"
+  shell: |
+    sudo systemctl daemon-reload
+    sudo systemctl enable node-exporter
+    sudo systemctl start node-exporter
+
+- name: "Install alert manager"
+  shell: |
+    wget https://github.com/prometheus/alertmanager/releases/download/v0.21.0/alertmanager-0.21.0.linux-amd64.tar.gz
+    tar xvfz alertmanager-0.21.0.linux-amd64.tar.gz
+
+    sudo cp alertmanager-0.21.0.linux-amd64/alertmanager /usr/local/bin
+    sudo cp alertmanager-0.21.0.linux-amd64/amtool /usr/local/bin/
+    sudo mkdir /var/lib/alertmanager
+
+    rm -rf alertmanager*
+
+- name: "create alertmanager service"
+  copy:
+    src: alertmanager.service
+    dest: /etc/systemd/system/alertmanager.service
+
+- name: "Setup alertmanager slack notification"
+  copy:
+    src: alertmanager.yml
+    dest: /usr/local/bin/alertmanager/alertmanager.yml
+
+- name: "start alert manager"
+  shell: |
+    sudo systemctl daemon-reload
+    sudo systemctl enable alertmanager
+    sudo systemctl start alertmanager
+
+- name: "Install grafana"
+  shell: |
+    sudo apt-get install -y adduser libfontconfig1
+    wget https://dl.grafana.com/enterprise/release/grafana-enterprise_9.0.1_amd64.deb
+    sudo dpkg -i grafana-enterprise_9.0.1_amd64.deb
+    sudo systemctl start grafana-server
