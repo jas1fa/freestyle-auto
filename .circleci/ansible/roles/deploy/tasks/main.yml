@@ -9,5 +9,5 @@
     cd ~/
     npm install
     pm2 stop default
-    npm run start:prod
-    #pm2 start npm -- start
+    # npm run start:prod
+    pm2 start npm -- start
