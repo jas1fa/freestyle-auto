@@ -30,10 +30,6 @@
     sudo chown -R prometheus:prometheus /etc/prometheus/console_libraries
     sudo chown -R prometheus:prometheus /var/lib/prometheus
 
-    sudo systemctl daemon-reload
-    sudo systemctl enable prometheus
-    sudo systemctl start prometheus
-
 - name: copy prometheus.yml
   copy:
     src: prometheus.yml
@@ -43,11 +39,12 @@
   copy:
     src: rules.yml
     dest: /usr/local/bin/prometheus/rules.yml
-  notify: restart prometheus
 
-# - name: restart prometheus service
-#   shell: |
-#     sudo systemctl restart prometheus
+- name: restart prometheus service
+  shell: |
+    sudo systemctl daemon-reload
+    sudo systemctl enable prometheus
+    sudo systemctl start prometheus
 
 - name: "install node-exporter"
   shell: |

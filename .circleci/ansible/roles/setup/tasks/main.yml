@@ -4,7 +4,6 @@
     name:
       - nodejs
       - npm
-      - typescript
 
 - name: install pm2
   shell: |
