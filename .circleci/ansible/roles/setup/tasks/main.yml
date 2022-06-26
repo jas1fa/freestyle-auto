@@ -8,7 +8,7 @@
     owner: ubuntu
 
 - name: load secret
-  shell: source ~/secrets.sh
+  shell: . ~/secrets.sh
 
 - name: "install nodejs"
   apt:
