@@ -335,7 +335,7 @@ jobs:
             echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> backend/env.production
             echo NODE_ENV=production >> backend/env.production
             echo ENVIRONMENT=production >> backend/env.production
-            cat .env.production
+            cat backend/.env.production
             rm -rf .env.sample
             tar -C backend -czvf artifact.tar.gz .
             mkdir -p ~/project/.circleci/ansible/roles/deploy/files/
