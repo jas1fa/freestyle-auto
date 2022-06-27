@@ -223,12 +223,12 @@ jobs:
       - add_ssh_keys:
           fingerprint: ["02:2b:53:b7:a0:8f:13:a5:4c:0d:a0:ed:90:5d:e1:f9"]
       # attach workspace
-      - attach_workspace:
-          at: ~/
       - run:
           name: Install dependencies
           command: |
             apk add --update --no-cache tar gzip ansible aws-cli openssh
+       - attach_workspace:
+          at: ~/
       - run:
           name: Configure server
           command: |
@@ -284,6 +284,8 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
+      - restore_cache:
+          keys: [frontend-build]
       - run:
           name: Install dependencies
           command: |
@@ -329,14 +331,14 @@ jobs:
           fingerprint: ["02:2b:53:b7:a0:8f:13:a5:4c:0d:a0:ed:90:5d:e1:f9"]
       - restore_cache:
           keys: [backend-build]
-      # attach workspace
-      - attach_workspace:
-          at: ~/
       - run:
           name: Install dependencies
           command: |
             # your code here
             apk add --update --no-cache tar gzip ansible aws-cli openssh nodejs npm curl
+      # attach workspace
+      - attach_workspace:
+          at: ~/
       - run:
           name: Deploy backend
           command: |
@@ -462,7 +464,7 @@ jobs:
              # Change the initial stack name, as applicable to you
              aws cloudformation deploy \
              --template-file .circleci/files/cloudfront.yml \
-             --stack-name InitialStack \
+             --stack-name InitialStack-${CIRCLE_WORKFLOW_ID:0:7} \
              --parameter-overrides WorkflowID=${CIRCLE_WORKFLOW_ID:0:7} \
              --tags project=udapeople
              echo OldWorkflowID=${OldWorkflowID}
@@ -510,18 +512,22 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprint: ["02:2b:53:b7:a0:8f:13:a5:4c:0d:a0:ed:90:5d:e1:f9"]
-      - attach_workspace:
-          at: ~/
       - run:
           name: Install dependencies
           command: |
             # your code here
             apk add --update --no-cache tar gzip ansible aws-cli openssh
+      - attach_workspace:
+          at: ~/
       - run:
           name: Configure monitoring
           command: |
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-monitoring.yml
+       - persist_to_workspace:
+          root: ~/
+          paths:
+            - project/.circleci/ansible/inventory.txt
 
 workflows:
   default:
@@ -538,6 +544,9 @@ workflows:
           requires: [build-frontend]
       - deploy-infrastructure:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+          filters:
+            branches
+              only : [main]
       - configure-infrastructure:
           requires: [deploy-infrastructure]
       - run-migrations:
