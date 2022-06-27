@@ -175,11 +175,11 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
-      - attach_workspace:
-          at: ~/
       - run:
           name: install tar and gzip
           command: yum install tar gzip -y
+      - attach_workspace:
+          at: ~/
       - run:
           name: Ensure back-end infrastructure exists
           command: |
