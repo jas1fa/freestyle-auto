@@ -33,12 +33,12 @@
 - name: copy prometheus.yml
   copy:
     src: prometheus.yml
-    dest: /usr/local/bin/prometheus/prometheus.yml
+    dest: /usr/local/bin/prometheus.yml
 
 - name: copy rules.yml
   copy:
     src: rules.yml
-    dest: /usr/local/bin/prometheus/rules.yml
+    dest: /usr/local/bin/rules.yml
 
 - name: restart prometheus service
   shell: |
@@ -85,7 +85,7 @@
 - name: "Setup alertmanager slack notification"
   copy:
     src: alertmanager.yml
-    dest: /usr/local/bin/alertmanager/alertmanager.yml
+    dest: /usr/local/bin/alertmanager.yml
 
 - name: "start alert manager"
   shell: |

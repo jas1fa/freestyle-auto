@@ -8,7 +8,7 @@ Type=simple
 User=prometheus
 Group=prometheus
 ExecStart=/usr/local/bin/alertmanager \
-  --config.file=/usr/local/bin/alertmanager/alertmanager.yml \
+  --config.file=/usr/local/bin/alertmanager.yml \
   --storage.path=/var/lib/alertmanager
 
 Restart=always
