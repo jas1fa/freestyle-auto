@@ -200,8 +200,8 @@ jobs:
           paths:
             - project/.circleci/ansible/inventory.txt
       # Here's where you will add some code to rollback on failure
-      - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      # - destroy-environment:
+      #     workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   configure-infrastructure:
     docker:
@@ -231,8 +231,8 @@ jobs:
           paths:
             - project/.circleci/ansible/inventory.txt
       # Here's where you will add some code to rollback on failure
-      - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      # - destroy-environment:
+      #     workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   run-migrations:
     docker:
@@ -266,8 +266,8 @@ jobs:
           paths: [frontend/node_modules]
           key: frontend-build
         # Here's where you will add some code to rollback on failure
-      - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      # - destroy-environment:
+      #     workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   deploy-frontend:
     docker:
@@ -306,10 +306,10 @@ jobs:
           paths: [frontend/node_modules]
           key: frontend-build
       # Here's where you will add some code to rollback on failure
-      - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-      - revert-migrations:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      # - destroy-environment:
+      #     workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      # - revert-migrations:
+      #     workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   deploy-backend:
     docker:
@@ -366,10 +366,10 @@ jobs:
           paths: [backend/node_modules]
           key: backend-build
       # Here's where you will add some code to rollback on failure
-      - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-      - revert-migrations:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      # - destroy-environment:
+      #     workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      # - revert-migrations:
+      #     workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   smoke-test:
     docker:
@@ -427,10 +427,10 @@ jobs:
               return 1
             fi
       # Here's where you will add some code to rollback on failure
-      - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-      - revert-migrations:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      # - destroy-environment:
+      #     workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      # - revert-migrations:
+      #     workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   cloudfront-update:
     docker:
@@ -455,71 +455,71 @@ jobs:
              cat ~/OldWorkflowID.txt
              # Change the initial stack name, as applicable to you
              aws cloudformation deploy \
-             --template-file .circleci/files/cloudfront.yml \
-             --stack-name InitialStack-${CIRCLE_WORKFLOW_ID:0:7} \
-             --parameter-overrides WorkflowID=${CIRCLE_WORKFLOW_ID:0:7} \
-             --tags project=udapeople
+               --template-file .circleci/files/cloudfront.yml \
+               --stack-name InitialStack-${CIRCLE_WORKFLOW_ID:0:7} \
+               --parameter-overrides WorkflowID=${CIRCLE_WORKFLOW_ID:0:7} \
+               --tags project=udapeople
              echo OldWorkflowID=${OldWorkflowID}
              echo Current Workflow ID: ${CIRCLE_WORKFLOW_ID:0:7}
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}      
       - revert-migrations:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
-  cleanup:
-    docker:
-      # Docker image here
-      - image: amazon/aws-cli
-    steps:
-      # Checkout code from git
-      - checkout
-      - run:
-          name: Get old stack workflow id
-          command: |
-            # your code here
-            # Fetch the Old workflow ID
-            export OldWorkflowID=$(aws cloudformation \
-                    list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
-                    --no-paginate --output text)
-            echo OldWorkflowID: "${OldWorkflowID}"
-            echo CIRCLE_WORKFLOW_ID "${CIRCLE_WORKFLOW_ID:0:7}"
-            # Fetch the stack names          
-            export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
-            --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
-            echo Stack names: "${STACKS[@]}"
-            if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
-            then
-              # your code here
-              aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
-              aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
-              aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
-            fi
+  # cleanup:
+  #   docker:
+  #     # Docker image here
+  #     - image: amazon/aws-cli
+  #   steps:
+  #     # Checkout code from git
+  #     - checkout
+  #     - run:
+  #         name: Get old stack workflow id
+  #         command: |
+  #           # your code here
+  #           # Fetch the Old workflow ID
+  #           export OldWorkflowID=$(aws cloudformation \
+  #                   list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+  #                   --no-paginate --output text)
+  #           echo OldWorkflowID: "${OldWorkflowID}"
+  #           echo CIRCLE_WORKFLOW_ID "${CIRCLE_WORKFLOW_ID:0:7}"
+  #           # Fetch the stack names          
+  #           export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
+  #           --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
+  #           echo Stack names: "${STACKS[@]}"
+  #           if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
+  #           then
+  #             # your code here
+  #             aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
+  #             aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
+  #             aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
+  #           fi
 
-  configure-monitoring:
-    docker:
-      # Docker image here
-      - image: python:3.10-alpine3.16
-    steps:
-      - checkout
-      - add_ssh_keys:
-          fingerprints: ["aa:bc:76:3f:57:34:3d:b9:c0:87:3f:61:3b:72:d8:8f"]
-      - run:
-          name: Install dependencies
-          command: |
-            # your code here
-            apk add --update --no-cache tar gzip ansible aws-cli openssh
-      - attach_workspace:
-          at: ~/
-      - run:
-          name: Configure monitoring
-          command: |
-            cd .circleci/ansible
-            ansible-playbook -i inventory.txt configure-monitoring.yml
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - project/.circleci/ansible/inventory.txt
+  # configure-monitoring:
+  #   docker:
+  #     # Docker image here
+  #     - image: python:3.10-alpine3.16
+  #   steps:
+  #     - checkout
+  #     - add_ssh_keys:
+  #         fingerprints: ["aa:bc:76:3f:57:34:3d:b9:c0:87:3f:61:3b:72:d8:8f"]
+  #     - run:
+  #         name: Install dependencies
+  #         command: |
+  #           # your code here
+  #           apk add --update --no-cache tar gzip ansible aws-cli openssh
+  #     - attach_workspace:
+  #         at: ~/
+  #     - run:
+  #         name: Configure monitoring
+  #         command: |
+  #           cd .circleci/ansible
+  #           ansible-playbook -i inventory.txt configure-monitoring.yml
+  #     - persist_to_workspace:
+  #         root: ~/
+  #         paths:
+  #           - project/.circleci/ansible/inventory.txt
 
 workflows:
   default:
@@ -551,7 +551,7 @@ workflows:
           requires: [deploy-backend, deploy-frontend]
       - cloudfront-update:
           requires: [smoke-test]
-      - cleanup:
-          requires: [cloudfront-update]
-      - configure-monitoring:
-          requires: [smoke-test]
+      # - cleanup:
+      #     requires: [cloudfront-update]
+      # - configure-monitoring:
+      #     requires: [smoke-test]
