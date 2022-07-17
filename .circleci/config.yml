@@ -210,16 +210,16 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
-      # Add ssh keys with fingerprint
+      # Add ssh keys
       - add_ssh_keys:
-          fingerprint: ["aa:bc:76:3f:57:34:3d:b9:c0:87:3f:61:3b:72:d8:8f"]
+          fingerprints: ["aa:bc:76:3f:57:34:3d:b9:c0:87:3f:61:3b:72:d8:8f"]
       # attach workspace
       - attach_workspace:
           at: ~/
       - run:
           name: Install dependencies
           command: |
-            apk add --update --no-cache tar gzip ansible aws-cli openssh
+            apk add --update --no-cache tar gzip ansible aws-cli
 
       - run:
           name: Configure server
@@ -318,9 +318,9 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
-      # Add ssh keys with fingerprint
+      # Add ssh keys with 
       - add_ssh_keys:
-          fingerprint: ["aa:bc:76:3f:57:34:3d:b9:c0:87:3f:61:3b:72:d8:8f"]
+          fingerprints: ["aa:bc:76:3f:57:34:3d:b9:c0:87:3f:61:3b:72:d8:8f"]
       - restore_cache:
           keys: [backend-build]
       - run:
@@ -503,7 +503,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprint: ["aa:bc:76:3f:57:34:3d:b9:c0:87:3f:61:3b:72:d8:8f"]
+          fingerprints: ["aa:bc:76:3f:57:34:3d:b9:c0:87:3f:61:3b:72:d8:8f"]
       - run:
           name: Install dependencies
           command: |
