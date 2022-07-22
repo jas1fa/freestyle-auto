@@ -36,5 +36,5 @@
     TYPEORM_DATABASE: "{{ lookup('env', 'TYPEORM_DATABASE') }}"  
 
   roles:
-    - configure-prometheus-node-exporter
+    - monitor-prometheus-exportnodes
     - configure-server
